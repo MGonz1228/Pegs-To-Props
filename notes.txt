@@ -1,0 +1,33 @@
+# NOTES:
+# Kinds of atoms
+	# Peg(H, 1) = Peg in hole H at time 1
+	# Jump(A, B, C, 1) = A jumps to C over B at time 1
+
+# Propositional Encoding:
+    # Precondition:
+    ¦   # Jump(8, 5, 3, 4)
+    ¦   ¦   # You need a peg at 8 and 5, but no peg at 3
+    ¦   ¦   # -> Peg(8, 4) ∧ Peg(5, 4) ∧ ¬Peg(3, 4)
+
+    # Causal:
+    ¦   # Jump(8, 5, 3, 4)
+    ¦   ¦   # After the jump, at time + 1, A and B will be empty and C will have a peg
+    ¦   ¦   # -> ¬Peg(8, 5) ∧ ¬Peg(5, 5) ∧ Peg(3, 5)
+
+    # Frame:
+    ¦   # Peg(6, 4) ∧ ¬Peg(6, 5)
+    ¦   ¦   # There are 4 jumps that could've resulted in this being true
+			# It was jumped or was the peg that did the jumping
+    ¦   ¦   # Jump(10, 6, 3, 4) ∨ Jump(3, 6, 10, 4) v Jump(6, 3, 1, 4) ∨ Jump(3, 6, 10, 4)
+
+    # One action at a time (obvious)
+
+    # Start state
+    ¦   # Specify Peg(H,1) for each hole H
+
+    # End state
+    ¦   # At least one peg remains at time N-1
+    ¦   ¦   # Peg(1, N−1) ∨ Peg(2, N−1) ∨ ... ∨ Peg(N, N−1)
+    ¦   # No two holes have a peg
+    ¦   ¦   # Assert that for every pair of holes, no two have a peg
+    ¦   ¦   # ¬(Peg(H, N−1) ∧ Peg(J, N−1))
